@@ -11,7 +11,7 @@ export default function Home(){
             key: 0, 
             date: "29/12/2001", 
             receiver: "Zezo", 
-            sender: "João Dantas", 
+            sender: "Joao Dantas1", 
             description: "haha",
             value: 200,
             type: "TED"
@@ -19,7 +19,7 @@ export default function Home(){
         {
             key: 1, 
             date: "10/12/2022", 
-            receiver: "João Dantas", 
+            receiver: "Joao Dantas1", 
             sender: "Zezo", 
             description: "hahahihi",
             value: 350,
@@ -30,11 +30,11 @@ export default function Home(){
     return(
         <Background>
             <ContainerInfo>
-                <Welcome>Bem vindo, <Name>{user?.name}</Name></Welcome>
+                <Welcome>Bem vindo, <Name>{user?.username}</Name></Welcome>
             </ContainerInfo>
             <ContainerBalance>
                 <BalanceText>Saldo</BalanceText>
-                <BalanceMoney>R$ {user?.balance}</BalanceMoney>
+                <BalanceMoney>R$ {user?.account.balance}</BalanceMoney>
             </ContainerBalance>
             <LastMovimentationTitle>Ultimas movimentações</LastMovimentationTitle>
             <List 

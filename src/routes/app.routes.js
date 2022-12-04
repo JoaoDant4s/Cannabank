@@ -6,6 +6,7 @@ import AccountConfig from "../screens/AccountConfig";
 import Feather from 'react-native-vector-icons/Feather'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import TransactionsRoutes from "./transaction.routes";
+import SettingsRoutes from "./settings.routes";
 const AppTab = createBottomTabNavigator();
 
 export default function AppRoutes(){
@@ -43,8 +44,8 @@ export default function AppRoutes(){
                 }}
             />
             <AppTab.Screen 
-                name="AccountConfig" 
-                component={AccountConfig}
+                name="SettingsRoutes" 
+                component={SettingsRoutes}
                 options={{
                     headerShown: false,
                     tabBarIcon: ({color, size}) => {

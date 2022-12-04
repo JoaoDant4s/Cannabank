@@ -1,37 +1,34 @@
-import { Button, Snackbar } from "@react-native-material/core";
-import { useNavigation } from "@react-navigation/native";
-import React, { useContext, useState } from "react";
-import { Text } from "react-native";
-import { AuthContext } from "../../contexts/auth";
-import { AreaInput, Background, Container, LogoTitle, SubmitButton, SubmitText } from "../Login/styles";
-import { InputRegister } from "./styles";
+import { Button, Snackbar } from '@react-native-material/core'
+import React, { useContext, useState } from 'react'
+import { AuthContext } from '../../../contexts/auth'
+import { AreaInput, Background, Container, LogoTitle, SubmitButton, SubmitText } from '../../Login/styles'
+import { InputRegister } from '../../Register/styles'
 
-export default function Register() {
-    const [name, setName] = useState("")
-    const [email, setEmail] = useState("")
+export default function EditAccount(){
+    const { user } = useContext(AuthContext)
+    
+    const [name, setName] = useState(user.username)
+    const [email, setEmail] = useState(user.email)
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
 
-    //feedbacks UX
     const [existEmail, setExistEmail] = useState(false)
     const [passwordNotEqual, setPasswordNotEqual] = useState(false)
     const [errorMessage, setErrorMessage] = useState("")
     const [existUserName, setExistUserName] = useState(false)
     const [snackbarVisible, setSnackbarVisible] = useState(false)
 
-    const navigateTo = useNavigation()
-
-    const { setUser } = useContext(AuthContext)
-
     const handleSubmit = () => {
+
         if(password.localeCompare(confirmPassword) !== 0){
             setErrorMessage("As senhas informadas não são iguais")
             setPasswordNotEqual(true)
             setSnackbarVisible(true)
             return
         }
-        fetch("http://10.0.2.2:8080/cannabank/auth/signup", {
-            method: "POST",
+
+        fetch("http://10.0.2.2:8080/cannabank/home", {
+            method: "PUT",
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -47,27 +44,19 @@ export default function Register() {
                 navigateTo.navigate("Login")
             })
             .catch((err) => console.log(err))
-
-
-        // fetch("http://10.0.2.2:8080/cannabank/home")
-        // .then((response) => response.json())
-        // .then((response) => {
-        //     console.log(response)
-        // }).catch((err) => {
-        //     console.log(err)}
-        // )
     }
-
+    
     const handleCloseSnackbar = () => {
         setExistEmail(false)
         setPasswordNotEqual(false)
         setExistUserName(false)
         setSnackbarVisible(false)
     }
-    return (
-        <Background>
+    
+  return (
+    <Background>
             <Container>
-                <LogoTitle>Cadastro</LogoTitle>
+                <LogoTitle>Editar Conta</LogoTitle>
                 <AreaInput>
                     <InputRegister
                         placeholder="Nome"
@@ -115,7 +104,7 @@ export default function Register() {
                     />
                 </AreaInput>
                 <SubmitButton onPress={handleSubmit}>
-                    <SubmitText >Finalizar Cadastro</SubmitText>
+                    <SubmitText>Salvar</SubmitText>
                 </SubmitButton>
                 {snackbarVisible && (<Snackbar 
                     message={errorMessage}
@@ -131,5 +120,5 @@ export default function Register() {
                 />)}
             </Container>
         </Background >
-    )
+  )
 }

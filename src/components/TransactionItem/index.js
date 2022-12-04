@@ -11,9 +11,9 @@ export default function TransactionItem({ data }){
     <ContainerTransaction>
         <Transaction>
             <Date>{data?.date}</Date>
-            <TypeContainer sender={data?.sender} userName={user?.name}>
+            <TypeContainer sender={data?.sender} userName={user?.username}>
                 <Feather 
-                    name={data?.sender === user?.name ? "arrow-down" : "arrow-up"}
+                    name={data?.sender === user?.username ? "arrow-down" : "arrow-up"}
                     color="#FFF" 
                     size={22}
                 />

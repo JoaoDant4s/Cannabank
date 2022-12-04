@@ -3,7 +3,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Login from "../screens/Login";
 import Register from "../screens/Register";
-import RegisterStep2 from "../screens/Register/RegisterStep2";
 
 const AuthStack = createNativeStackNavigator();
 
@@ -27,20 +26,6 @@ export default function AuthRoutes(){
                     headerTintColor: 'white',
                     headerBackTitleVisible: false,
                     headerTitle: "Voltar para login"
-                }}
-            />
-            <AuthStack.Screen 
-                name="RegisterStep2"
-                component={RegisterStep2}
-                options={{
-                    headerStyle:{
-                        backgroundColor: '#10403B',
-                        borderBottomWidth: 1,
-                        borderBottomColor: '#A6BC09'
-                    },
-                    headerTintColor: 'white',
-                    headerBackTitleVisible: false,
-                    headerTitle: "Voltar"
                 }}
             />
         </AuthStack.Navigator>

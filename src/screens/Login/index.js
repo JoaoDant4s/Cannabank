@@ -6,7 +6,7 @@ import { AreaInput, Background, Container, Input, LogoTitle, SubmitButton, Submi
 export default function Login() {
     const [nome, setNome] = useState("")
     const [password, setPassword] = useState("")
-    const { user } = useContext(AuthContext)
+    const { setUser } = useContext(AuthContext)
 
     const navigateTo = useNavigation()
 
@@ -18,14 +18,15 @@ export default function Login() {
             },
             body: JSON.stringify({
                 username: nome,
-                password: password
+                password
             })
         }).then((response) => response.json())
             .then((response) => {
+                console.log("deu bigode")
                 console.log(response)
-                navigateTo.navigate("Home")
+                setUser(response)
             })
-            .catch((err) => console.log(err))
+            .catch((err) => console.log("err"))
     }
 
     return (

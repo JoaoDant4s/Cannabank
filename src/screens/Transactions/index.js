@@ -30,7 +30,7 @@ export default function Transactions() {
       </ContainerInfo>
       <SafeAreaView style={{ alignItems: "center"}}>
         <TitleTransaction>Qual valor você deseja transferir?</TitleTransaction>
-        <BalanceTransaction>Saldo: R$ {user?.balance}</BalanceTransaction>
+        <BalanceTransaction>Saldo: R$ {user?.account.balance}</BalanceTransaction>
         <Input
           placeholder="R$ 0,00"
           autoCorrect={false}
