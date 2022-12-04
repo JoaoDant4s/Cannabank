@@ -1,27 +1,27 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
-import { AreaInput, Background, Container, Input, SubmitButton, SubmitText} from "../Login/styles";
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../../contexts/auth";
+import { AreaInput, Background, Container, Input, SubmitButton, SubmitText } from "../Login/styles";
 
-export default function Register(){
+export default function Register() {
     const [name, setName] = useState("")
-    const [cpf, setCpf] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [RG, setRG] = useState("")
+
+    const { setUser } = useContext(AuthContext)
 
     const navigateTo = useNavigation()
 
-    const handleContinue = () => {
+    const handleSubmit = () => {
+        fetch("http://10.0.2.2:8080/cannabank/home").then((response) => response.json())
+            .then((response) => {
+                console.log(response)
+            }).catch((err) => console.log(err))
 
-        navigateTo.navigate('RegisterStep2', {
-            name,
-            cpf,
-            email,
-            password,
-            RG
-        })
     }
-    return(
+
+
+    return (
         <Background>
             <Container>
                 <AreaInput>
@@ -32,26 +32,6 @@ export default function Register(){
                         value={name}
                         underlineColorAndroid="transparent"
                         onChangeText={(value) => setName(value)}
-                    />
-                </AreaInput>
-                <AreaInput>
-                    <Input
-                        placeholder="CPF"
-                        autoCorrect={false}
-                        autoCapitalize="none"
-                        value={cpf}
-                        underlineColorAndroid="transparent"
-                        onChangeText={(value) => setCpf(value)}
-                    />
-                </AreaInput>
-                <AreaInput>
-                    <Input
-                        placeholder="RG"
-                        autoCorrect={false}
-                        autoCapitalize="none"
-                        value={RG}
-                        underlineColorAndroid="transparent"
-                        onChangeText={(value) => setRG(value)}
                     />
                 </AreaInput>
                 <AreaInput>
@@ -75,10 +55,10 @@ export default function Register(){
                         onChangeText={(value) => setPassword(value)}
                     />
                 </AreaInput>
-                <SubmitButton>
-                    <SubmitText onPress={handleContinue}>Continuar</SubmitText>
+                <SubmitButton onPress={handleSubmit}>
+                    <SubmitText >Finalizar Cadastro</SubmitText>
                 </SubmitButton>
             </Container>
-        </Background>
+        </Background >
     )
 }

@@ -2,14 +2,11 @@ import React, { createContext, useState } from "react";
 
 export const AuthContext = createContext()
 
-function AuthProvider({ children }){
-    const [ user, setUser ] = useState({
-        name: "João Dantas",
-        balance: 300.00,
-    })
+function AuthProvider({ children }) {
+    const [user, setUser] = useState();
 
-    return(
-        <AuthContext.Provider value={{ signed: !!user, user, setUser}}>
+    return (
+        <AuthContext.Provider value={{ signed: !!user, user, setUser }}>
             {children}
         </AuthContext.Provider>
     )
