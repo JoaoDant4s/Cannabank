@@ -30,6 +30,7 @@ export const Input = styled.TextInput.attrs({
     padding: 10px;
     border-radius: 8px;
     height: 45px;
+    border: ${props => props.error ? "2px solid red" : "2px solid #10403B"};
 `
 
 export const SubmitButton = styled.TouchableOpacity`

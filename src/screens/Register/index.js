@@ -1,8 +1,6 @@
 import { Button, Snackbar } from "@react-native-material/core";
 import { useNavigation } from "@react-navigation/native";
-import React, { useContext, useState } from "react";
-import { Text } from "react-native";
-import { AuthContext } from "../../contexts/auth";
+import React, { useState } from "react";
 import { AreaInput, Background, Container, LogoTitle, SubmitButton, SubmitText } from "../Login/styles";
 import { InputRegister } from "./styles";
 
@@ -20,8 +18,6 @@ export default function Register() {
     const [snackbarVisible, setSnackbarVisible] = useState(false)
 
     const navigateTo = useNavigation()
-
-    const { setUser } = useContext(AuthContext)
 
     const handleSubmit = () => {
         if(password.localeCompare(confirmPassword) !== 0){
@@ -47,15 +43,6 @@ export default function Register() {
                 navigateTo.navigate("Login")
             })
             .catch((err) => console.log(err))
-
-
-        // fetch("http://10.0.2.2:8080/cannabank/home")
-        // .then((response) => response.json())
-        // .then((response) => {
-        //     console.log(response)
-        // }).catch((err) => {
-        //     console.log(err)}
-        // )
     }
 
     const handleCloseSnackbar = () => {
@@ -93,6 +80,7 @@ export default function Register() {
                 <AreaInput>
                     <InputRegister
                         placeholder="Senha"
+                        secureTextEntry={true}
                         type="password"
                         autoCorrect={false}
                         autoCapitalize="none"
@@ -105,6 +93,7 @@ export default function Register() {
                 <AreaInput>
                     <InputRegister
                         placeholder="Confirmar senha"
+                        secureTextEntry={true}
                         type="password"
                         autoCorrect={false}
                         autoCapitalize="none"

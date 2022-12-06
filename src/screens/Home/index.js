@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import TransactionItem from "../../components/TransactionItem";
 import { AuthContext } from "../../contexts/auth";
 import { Background } from "../Login/styles";
@@ -26,7 +26,9 @@ export default function Home(){
             type: "TED"
         },
     ])
-
+    // useEffect(() => {
+    //     fetch("http://10.0.2.2:8080/cannabank/home").then(res => console.log(res)).catch(err => console.log(err))
+    // },[])
     return(
         <Background>
             <ContainerInfo>

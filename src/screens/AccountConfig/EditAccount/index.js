@@ -1,54 +1,73 @@
 import { Button, Snackbar } from '@react-native-material/core'
 import React, { useContext, useState } from 'react'
 import { AuthContext } from '../../../contexts/auth'
+import { getAttBalanceUserForContext, userNameOrEmailUpdated } from '../../../helpers'
 import { AreaInput, Background, Container, LogoTitle, SubmitButton, SubmitText } from '../../Login/styles'
 import { InputRegister } from '../../Register/styles'
 
 export default function EditAccount(){
-    const { user } = useContext(AuthContext)
+    const { user, setUser } = useContext(AuthContext)
     
     const [name, setName] = useState(user.username)
     const [email, setEmail] = useState(user.email)
-    const [password, setPassword] = useState("")
-    const [confirmPassword, setConfirmPassword] = useState("")
-
-    const [existEmail, setExistEmail] = useState(false)
-    const [passwordNotEqual, setPasswordNotEqual] = useState(false)
+    const [deposit, setDeposit] = useState(0)
     const [errorMessage, setErrorMessage] = useState("")
-    const [existUserName, setExistUserName] = useState(false)
     const [snackbarVisible, setSnackbarVisible] = useState(false)
 
-    const handleSubmit = () => {
-
-        if(password.localeCompare(confirmPassword) !== 0){
-            setErrorMessage("As senhas informadas não são iguais")
-            setPasswordNotEqual(true)
+    const handleSubmit = async () => {
+        const userUpdated = userNameOrEmailUpdated(user.email, email, user.username, name)
+        if(deposit){
+            await fetch("http://10.0.2.2:8080/cannabank/home/account/deposit", {
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    accountNumber: user.account.accountNumber,
+                    balance: user.account.balance + parseInt(deposit),
+                    id: user.account.id
+                })
+            })
+            .catch(err => {
+                console.log(err.messsage)
+                setErrorMessage(err.message)
+                setSnackbarVisible(true)
+            })
+            setErrorMessage("Valor depositado com sucesso")
             setSnackbarVisible(true)
-            return
+            setUser(getAttBalanceUserForContext(user, deposit))
         }
 
-        fetch("http://10.0.2.2:8080/cannabank/home", {
-            method: "PUT",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: name,
-                password,
-                email
+        if(userUpdated){
+            await fetch("http://10.0.2.2:8080/cannabank/home", {
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    account: {
+                        accountNumber: user.account.accountNumber,
+                        balance: user.account.balance,
+                        id: user.account.id
+                    },
+                    email,
+                    id: user.id,
+                    password: user.password,
+                    roles: user.roles,
+                    transactions: user.transactions,
+                    username: name
+                })
+            }).then(() => setUser(null))
+            .catch(err => {
+                console.log(err.messsage)
+                setErrorMessage(err.message)
+                setSnackbarVisible(true)
             })
-        }).then((response) => response.json())
-            .then((response) => {
-                console.log(response)
-                // setUser(response)
-                navigateTo.navigate("Login")
-            })
-            .catch((err) => console.log(err))
+        }
     }
     
     const handleCloseSnackbar = () => {
         setExistEmail(false)
-        setPasswordNotEqual(false)
         setExistUserName(false)
         setSnackbarVisible(false)
     }
@@ -65,7 +84,6 @@ export default function EditAccount(){
                         value={name}
                         underlineColorAndroid="transparent"
                         onChangeText={(value) => setName(value)}
-                        userNameTaken={existUserName}
                     />
                 </AreaInput>
                 <AreaInput>
@@ -76,36 +94,19 @@ export default function EditAccount(){
                         value={email}
                         underlineColorAndroid="transparent"
                         onChangeText={(value) => setEmail(value)}
-                        emailTaken={existEmail}
                     />
                 </AreaInput>
                 <AreaInput>
                     <InputRegister
-                        placeholder="Senha"
-                        type="password"
+                        placeholder="Depositar valor"
                         autoCorrect={false}
                         autoCapitalize="none"
                         underlineColorAndroid="transparent"
-                        value={password}
-                        onChangeText={(value) => setPassword(value)}
-                        passwordNotEqual={passwordNotEqual}
+                        keyboardType="numeric"
+                        value={deposit}
+                        onChangeText={(value) => setDeposit(value)}
                     />
                 </AreaInput>
-                <AreaInput>
-                    <InputRegister
-                        placeholder="Confirmar senha"
-                        type="password"
-                        autoCorrect={false}
-                        autoCapitalize="none"
-                        underlineColorAndroid="transparent"
-                        value={confirmPassword}
-                        onChangeText={(value) => setConfirmPassword(value)}
-                        passwordNotEqual={passwordNotEqual}
-                    />
-                </AreaInput>
-                <SubmitButton onPress={handleSubmit}>
-                    <SubmitText>Salvar</SubmitText>
-                </SubmitButton>
                 {snackbarVisible && (<Snackbar 
                     message={errorMessage}
                     action={
@@ -118,6 +119,9 @@ export default function EditAccount(){
                         />}
                     style={{ position: "absolute", start: 16, end: 16, bottom: 16 }}
                 />)}
+                <SubmitButton onPress={handleSubmit}>
+                    <SubmitText>Salvar</SubmitText>
+                </SubmitButton>
             </Container>
         </Background >
   )
