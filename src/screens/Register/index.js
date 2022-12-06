@@ -39,10 +39,9 @@ export default function Register() {
         }).then((response) => response.json())
             .then((response) => {
                 console.log(response)
-                // setUser(response)
                 navigateTo.navigate("Login")
             })
-            .catch((err) => console.log(err))
+            .catch((err) => console.log(err.message))
     }
 
     const handleCloseSnackbar = () => {

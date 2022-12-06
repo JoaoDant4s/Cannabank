@@ -20,6 +20,10 @@ export default function DialogDestructive(props){
                 method: "POST"
             })
             .catch(err => console.log(err))
+        } else {
+            await fetch("http://10.0.2.2:8080/cannabank/home", {
+                method: "DELETE"
+            }).catch(err => console.log(err))
         }
 
         setUser(null)
@@ -30,9 +34,6 @@ export default function DialogDestructive(props){
             <Dialog visible={props.visible} onDismiss={() => props.setVisible(false)}>
                 <DialogHeader  title={modalMessage} style={{marginBottom: "30px"}}/>
                 <DialogContent>
-                    {/* <Text>
-                        Tem certeza que deseja excluir a sua conta?
-                    </Text> */}
                     <View style={{flex: 1, brackgroundColor: "red"}}>
 
                     </View>

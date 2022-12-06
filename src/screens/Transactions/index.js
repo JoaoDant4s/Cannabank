@@ -1,20 +1,19 @@
 import { Button, Snackbar } from '@react-native-material/core';
-import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useState } from 'react';
 import { SafeAreaView} from 'react-native';
 import { AuthContext } from '../../contexts/auth';
+import { addTransactionToListAndAttContext, getAttBalanceUserForContext } from '../../helpers';
 import { ContainerInfo, Welcome } from '../Home/styles';
 import { Background, SubmitButton, SubmitText } from '../Login/styles';
 import { TitleTransaction, BalanceTransaction, InputTransaction } from './styles';
 
 export default function Transactions() {
   const [ value, setValue ] = useState(0)
-  const [ account, setAccount] = useState(0)
+  const [ account, setAccount] = useState("")
   const [ description, setDescription] = useState("")
   const [ snackbarVisible, setSnackbarVisible ] = useState(false)
   const [ errorMessage, setErrorMessage ] = useState("")
-  const { user } = useContext(AuthContext)
-  const navigateTo = useNavigation()
+  const { user, setUser } = useContext(AuthContext)
   const [ valueError, setValueError ] = useState(false)
   const [ accountNumberError, setAccountNumberError ] = useState(false)
 
@@ -26,9 +25,6 @@ export default function Transactions() {
   }
 
   const handleContinue = async () => {
-    console.log(value)
-    console.log(account)
-    console.log(description)
     let responseTransaction = {}
     let error = ""
     await fetch("http://10.0.2.2:8080/cannabank/home/transaction", {
@@ -61,45 +57,13 @@ export default function Transactions() {
       return
     }
 
-    await fetch("http://10.0.2.2:8080/cannabank/home/account/deposit", {
-      method: "PUT",
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-          accountNumber: user.account.accountNumber,
-          balance: user.account.balance + parseInt(value),
-          id: user.account.id
-      })
-    })
-    .catch(err => {
-        console.log(err.messsage)
-        setErrorMessage("Erro ao depositar na conta informada")
-        setSnackbarVisible(true)
-    })
-
-    await fetch("http://10.0.2.2:8080/cannabank/home/account/withdraw", {
-      method: "PUT",
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-          accountNumber: user.account.accountNumber,
-          balance: user.account.balance - parseInt(value),
-          id: user.account.id
-      })
-    })
-    .catch(err => {
-        console.log(err.messsage)
-        setErrorMessage("Erro ao depositar na conta informada")
-        setSnackbarVisible(true)
-    })
-
-    // navigateTo.navigate('TransactionsStep2', {
-    //   value,
-    //   account,
-    //   description
-    // })
+    console.log(responseTransaction)
+    setAccount("")
+    setValue(0)
+    setDescription("")
+    setErrorMessage("Transação concluída com sucesso")
+    setSnackbarVisible(true)
+    setUser(addTransactionToListAndAttContext(user, responseTransaction, -value))
   }
 
   const handleAccount = value => {
